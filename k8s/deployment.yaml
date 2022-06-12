@@ -1,1 +1,33 @@
-kind:  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversor
+spec:
+  selector:
+    matchLabels:
+      app: conversor
+  template:
+    metadata:
+      labels:
+        app: conversor
+    spec:
+      containers:
+      - name: conversor
+        image: dverazs/conversao-temperatura:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversor
+spec:
+  selector:
+    app: conversor
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30000
+  type: NodePort
